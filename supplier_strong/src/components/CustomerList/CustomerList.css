@@ -1,0 +1,9 @@
+.customer-icon {
+  width: 13vw;
+  height: 30vh;
+}
+
+.customerlist-container {
+  margin-left: 30vh;
+  position: absolute;
+}

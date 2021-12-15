@@ -1,0 +1,8 @@
+.card-details {
+  border: 1px solid black;
+  width: 40vw;
+  background-color: rgba(121, 184, 208, 0.5);
+  color: rgb(43, 44, 44);
+  font-size: 17px;
+  padding: 10px;
+}

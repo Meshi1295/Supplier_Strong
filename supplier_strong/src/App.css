@@ -1,0 +1,89 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.App {
+  background-image: url('./img/homeimg.jpg');
+  background-repeat: no-repeat;
+  background-size: 100vw 200vh;
+  opacity: 0.8;
+  background-color: rgb(160, 159, 159);
+}
+
+/* nav */
+.icon {
+  font-size: 23px;
+  color: aliceblue;
+}
+
+/* footer */
+.footer {
+  background-color: rgba(17, 124, 65, 0.5);
+  margin-top: 100vh;
+}
+
+nav {
+  background-color: rgba(17, 124, 65, 0.5);
+}
+
+/* Customers component */
+
+.avatar {
+  vertical-align: middle;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid black;
+  margin: 10px;
+}
+
+.icon-newUser {
+  vertical-align: middle;
+  width: 7vw;
+  height: 12vh;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.nuv-customers {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Customer component */
+
+.hed-customer {
+  border: 1px solid black;
+}
+
+.list {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}
+
+.list li {
+  margin: 7px;
+}
+
+.list li input {
+  border-radius: 5px;
+  background-color: rgb(178, 218, 207);
+}
+
+/* AddCustomer */
+.form-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 5px 10px 5px #888888;
+  width: 35vw;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+.form-container input {
+  width: 20vw;
+}
