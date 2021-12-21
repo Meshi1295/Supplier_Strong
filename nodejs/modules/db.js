@@ -18,20 +18,47 @@ const getCustomers = () => {
         .from('customerlist')
 }
 
+const getSpecificCustomer = (id) => {
+    return db('customerlist')
+        .select('*')
+        .from('customerlist')
+        .where('customer_id', id)
+}
+
 const setNewCustomer = (
-    { nameStore, fullName, startDate, phoneNumber, address }) => {
+    { nameStore, fullName, startDate, phoneNumber, address, filename }) => {
     return db('customerlist')
         .insert([{
             customer_name: fullName,
             store_name: nameStore,
             customer_phone: phoneNumber,
             start_work_date: startDate,
-            address
+            address: address,
+            profileimg: filename
         }])
         .returning('*')
 }
 
+const deleteCustomer = (customer_id) => {
+    return db('customerlist')
+        .where({ customer_id: customer_id })
+        .del()
+        .returning('*')
+
+}
+
+const setNewProduct = (data) => {
+    console.log("db", data);
+    // return db('productlist')
+    // .insert()
+    // .returning('*')
+
+}
+
 module.exports = {
     getCustomers,
-    setNewCustomer
+    setNewCustomer,
+    getSpecificCustomer,
+    deleteCustomer,
+    setNewProduct
 }

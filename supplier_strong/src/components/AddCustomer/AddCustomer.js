@@ -1,9 +1,10 @@
-// import Axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux";
 import { setCustomer } from '../../redux/actions'
+import { useNavigate } from 'react-router-dom'
 
 const AddCustomer = (props) => {
+
     const [nameStore, setNameStore] = useState('')
     const [fullName, setFullName] = useState('')
     const [startDate, setStartDate] = useState('')
@@ -11,25 +12,25 @@ const AddCustomer = (props) => {
     const [address, setAddress] = useState('')
     const [profileImg, setProfileImg] = useState('')
 
+    // navigate
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (props.navigateToCustomerComponent) {
+            navigate('/myCustomer')
+        }
+    }, [props.navigateToCustomerComponent])
+
+    // insert to db
     const setNewCustomer = (e) => {
         e.preventDefault()
-        props.setCustomer({ nameStore, fullName, startDate, phoneNumber, address, profileImg });
+        props.setCustomer(
+            { nameStore, fullName, startDate, phoneNumber, address, profileImg });
     }
 
-    // const send = (e) => {
-    //     const data = new FormData();
-    //     data.append('file', profileImg)
-
-    //     Axios.post(' http://localhost:3000/upload', data)
-    //         .then(res => console.log(res))
-    //         .catch(err => console.log(err))
-
-    // }
     return (
         <div>
-            <h1>AddCustomer</h1>
-            <form className="form-container" onSubmit={setNewCustomer} method="POST"
-                enctype="multipart/form-data">
+            <h1>AddCustomer component</h1>
+            <form className="form-container" onSubmit={setNewCustomer} method="POST">
                 <label>Name store:</label>
                 <input type="text" onChange={(e) => setNameStore(e.target.value)} />
 
@@ -57,7 +58,7 @@ const AddCustomer = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-
+        navigateToCustomerComponent: state.reducer_setCustomer.navigateToCustomerComponent
     }
 }
 

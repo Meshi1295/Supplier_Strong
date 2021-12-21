@@ -1,20 +1,67 @@
+import axios from 'axios';
+
 export const setCustomer = (value) => async (dispatch) => {
-    console.log(value);
-
+    // console.log('value.profileImg', value);
+    const formData = new FormData();
+    formData.append("image", value.profileImg);
+    formData.append("nameStore", value.nameStore);
+    formData.append("fullName", value.fullName);
+    formData.append("startDate", value.startDate);
+    formData.append("phoneNumber", value.phoneNumber);
+    formData.append("address", value.address);
     try {
-        const res = await fetch('http://localhost:8080/setCustomer', {
-            method: 'post',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(value)
-        })
-        const data = await res.json()
-
+        const data = await axios.post(
+            'http://localhost:8080/setCustomer',
+            formData
+        );
+        // console.log('data', data);
         dispatch({
-            type: 'SETCUSTOMER',
+            type: 'SET_CUSTOMER',
             payload: data
         })
+    } catch (e) { console.log(e) }
+}
 
-    } catch (e) {
-        console.log(e);
+export const setNewProduct = (value) => async (dispatch) => {
+    console.log(value);
+    const formData = new FormData();
+    formData.append("id", value.id);
+    formData.append("name", value.name);
+    formData.append("price", value.price);
+    formData.append("img", value.img);
+    formData.append("description", value.description);
+
+    try {
+        const data = await axios.post(
+            'http://localhost:8080/setNewProduct',
+            formData
+        );
+        // console.log('data', data);
+        dispatch({
+            type: 'SET_PRODUCT',
+            payload: data
+        })
+    } catch (e) { console.log(e) }
+}
+
+export const setNavigateToCustomerComponent = (value) => {
+    return {
+        type: 'SET_NAVIGATE',
+        payload: value
     }
 }
+
+export const delCustomer = (id) => (dispatch) => {
+    try {
+        axios
+            .delete(`http://localhost:8080/deleteCustomer/${id}`, {
+                method: 'DELETE',
+            })
+        dispatch({
+            type: 'DELETE-CUSTOMER',
+            payload: id
+        })
+    } catch (e) { console.log(e) }
+}
+
+

@@ -1,50 +1,65 @@
 import React, { useState } from 'react'
-import logo2 from '../../img/logo2.png'
 import DetailsCustomer from '../Details/DetailsCustomer';
+import InternalNav from '../InternalNav/InternalNav'
+import { connect } from 'react-redux';
+import { useParams, useNavigate } from "react-router-dom";
+import { delCustomer } from '../../redux/actions'
+
 
 const Customer = (props) => {
-    console.log('props', props);
-    const [isShow, setIsShow] = useState(false);
+    const { profileimg } = props
+    const { id } = useParams()
 
+    // show and hidden details
+    const [isShow, setIsShow] = useState(false);
     const showDetails = () => {
         setIsShow(!isShow)
     }
 
+    // navigate
+    const navigate = useNavigate()
+    const changeNavigate = () => {
+        props.delCustomer(id);
+        navigate('/myCustomer')
+    }
+
     return (
         <div>
+            <h6>Customer component</h6>
             <header className="hed-customer">
                 <ul className="list">
-                    <li><input type="submit" value="Delete Customer" /></li>
-                    <li><input type="submit" value="Details" onClick={showDetails} /></li>
-                    <li><img src={logo2} alt="customer" className="avatar" /></li>
-                    <li id="DetailsData"> {isShow ? <DetailsCustomer /> : <p>No Details</p>} </li>
+                    <li>
+                        <input
+                            className="btn"
+                            type="submit"
+                            value="Delete Customer"
+                            onClick={changeNavigate} /></li>
+                    <li><input
+                        className="btn"
+                        type="submit"
+                        value="Details"
+                        onClick={showDetails} /></li>
+                    <li><img src={`http://localhost:8080/uploads/${profileimg}`} alt="customer" className="avatar" /></li>
+                    <li id="DetailsData"> {isShow ? <DetailsCustomer id={id} /> : <p>No Details</p>} </li>
                 </ul>
             </header>
 
-            <table id='table' className="table table-hover">
-                <thead>
-                    <th> product name</th>
-                    <th>Fixed price</th>
-                    <th>Starting quantity of products</th>
-                    <th>How much is left in the store</th>
-                    <th>How much is sold</th>
-                    <th>Total money</th>
-                    <th>Quantity of products to complete</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Delicious sausage</td>
-                        <td>2 $</td>
-                        <td>100</td>
-                        <td>50</td>
-                        <td>50</td>
-                        <td>100 $</td>
-                        <td>50</td>
-                    </tr>
-                </tbody>
-            </table>
+            < InternalNav />
         </div>
     )
 }
 
-export default Customer;
+
+const mapStateToProps = (state) => {
+    return {
+        navigateToCustomerComponent: state.reducer_setCustomer.navigateToCustomerComponent
+    }
+}
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        delCustomer: (id) => dispatch(delCustomer(id))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Customer);

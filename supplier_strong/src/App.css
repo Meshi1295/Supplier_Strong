@@ -5,11 +5,9 @@
 }
 
 .App {
-  background-image: url('./img/homeimg.jpg');
-  background-repeat: no-repeat;
   background-size: 100vw 200vh;
   opacity: 0.8;
-  background-color: rgb(160, 159, 159);
+  background-color: rgb(243, 250, 247);
 }
 
 /* nav */
@@ -20,12 +18,13 @@
 
 /* footer */
 .footer {
-  background-color: rgba(17, 124, 65, 0.5);
+  background-color: rgba(14, 91, 119, 0.905);
   margin-top: 100vh;
+  color: aliceblue;
 }
 
 nav {
-  background-color: rgba(17, 124, 65, 0.5);
+  background-color: rgba(14, 91, 119, 0.905);
 }
 
 /* Customers component */
@@ -68,9 +67,8 @@ nav {
   margin: 7px;
 }
 
-.list li input {
-  border-radius: 5px;
-  background-color: rgb(178, 218, 207);
+.btn {
+  background-color: rgba(121, 184, 208, 0.5);
 }
 
 /* AddCustomer */

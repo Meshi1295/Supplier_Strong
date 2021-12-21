@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import './DetailsCustomer.css'
 
+const DetailsCustomer = (props) => {
 
-const DetailsCustomer = () => {
-    const [allCustomerData, setAllCustomerData] = useState('')
-    console.log("allCustomerData", allCustomerData);
+    const { id } = props
+    const [oneCustomerData, setOneCustomerData] = useState('')
 
     useEffect(() => {
-        fetch('http://localhost:8080/allCustomer')
+        fetch(`http://localhost:8080/specificCustomer/${id}`)
             .then(res => res.json())
-            .then(data => setAllCustomerData(data))
+            .then(data => setOneCustomerData(data))
+            .catch(e => console.log(e))
     }, [])
-
 
     return (
         <div>
-            <h4>Details Customer</h4>
+            <h4>Details Customer component</h4>
             {
-                allCustomerData.length ? (
-                    allCustomerData.map(item => {
+                oneCustomerData.length ? (
+                    oneCustomerData.map(item => {
                         return <div className='card-details' key={item.customer_id}>
                             <p> Customer Name: {item.customer_name}</p>
                             <p>Store Name: {item.store_name}</p>
                             <p>Phone: {item.customer_phone}</p>
-                            <p>Address: {item.customer_address}</p>
+                            <p>Address: {item.address}</p>
                             <p>Start work in: {item.start_work_date}</p>
-                            <button>Update</button>
+                            <button className="btn">Update</button>
                         </div>
                     })
                 ) : null

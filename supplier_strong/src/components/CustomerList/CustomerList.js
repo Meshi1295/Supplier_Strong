@@ -7,6 +7,7 @@ class CustomerList extends Component {
     render() {
         return (
             <div className="customerlist-container">
+                <h5>CustomerList component</h5>
                 <Link to='/myCustomer'>
                     <img className="customer-icon" src={customer} alt="customer-list" />
                 </Link>
