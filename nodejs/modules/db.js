@@ -48,10 +48,9 @@ const deleteCustomer = (customer_id) => {
 }
 
 const setNewProduct = (data) => {
-    console.log("db", data);
-    // return db('productlist')
-    // .insert()
-    // .returning('*')
+    return db('productlist')
+        .insert(data)
+        .returning('*')
 
 }
 

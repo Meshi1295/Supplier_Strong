@@ -76,14 +76,11 @@ app.delete('/deleteCustomer/:id', (req, res) => {
 
 // --------- product -----------
 
-app.post('/setNewProduct', upload.single('image'), (req, res) => {
-    console.log('upload.storage.filename', req.file.filename);
-    console.log(req.file);
+app.post('/setNewProduct', (req, res) => {
     try {
-        const value = { ...req.body, filename: req.file.filename }
 
-        db.setNewProduct(value)
-            .then(customer => res.json(customer))
+        db.setNewProduct(req.body)
+            .then(customer => console.log("hi", customer))
             .catch(err => {
                 console.log(err);
                 res.json({ mes: err })
