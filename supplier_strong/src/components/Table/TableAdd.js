@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './TableAdd.css'
 import { connect } from 'react-redux'
 import { setNewProduct } from '../../redux/actions'
@@ -9,8 +9,19 @@ const TableAdd = (props) => {
         id: '',
         name: '',
         price: '',
+        profileImg: '',
         description: ''
     })
+    const [profileImg, setProfileImg] = useState('')
+
+
+    useEffect(() => {
+        fetch('http://localhost:8080/allProducts')
+            .then(res => res.json())
+            .then(data => setProducts(data))
+            .catch((e) => console.log("e", e))
+
+    }, [])
 
     const addFormChange = (e) => {
         e.preventDefault()
@@ -30,6 +41,7 @@ const TableAdd = (props) => {
             id: addFormData.id,
             name: addFormData.name,
             price: addFormData.price,
+            profileImg: profileImg,
             description: addFormData.description
         }
 
@@ -37,7 +49,7 @@ const TableAdd = (props) => {
         const newProducts = [...products]
         setProducts(newProducts)
 
-        props.setNewProduct(products)
+        props.setNewProduct(newProduct)
     }
 
     return (
@@ -48,6 +60,7 @@ const TableAdd = (props) => {
                         <th>Product ID</th>
                         <th>Product Name</th>
                         <th>Fixed Price</th>
+                        <th>image</th>
                         <th>Description</th>
                     </tr>
                 </thead>
@@ -57,6 +70,8 @@ const TableAdd = (props) => {
                             <td>{product.id}</td>
                             <td>{product.name}</td>
                             <td>{product.price}</td>
+                            <td>
+                                <img style={{ width: '50px', height: '50px' }} src={`http://localhost:8080/uploads/${product.image}`} alt="product" /></td>
                             <td>{product.description}</td>
                             <td>
                                 <button className="btn edit">Edit</button>
@@ -75,6 +90,10 @@ const TableAdd = (props) => {
                     onChange={addFormChange} />
                 <input type="number" name="price" placeholder="Fixed Price"
                     onChange={addFormChange} />
+
+                <input type="file" alt="profileImg" name="image" accept=".jpg"
+                    onChange={(e) => setProfileImg(e.target.files[0])} />
+
                 <input type="text" name="description" placeholder="Description"
                     onChange={addFormChange} />
                 <button className="btn">Add</button>

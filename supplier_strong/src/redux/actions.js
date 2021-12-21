@@ -23,11 +23,18 @@ export const setCustomer = (value) => async (dispatch) => {
 }
 
 export const setNewProduct = (value) => async (dispatch) => {
+    const formData = new FormData();
+    formData.append("image", value.profileImg);
+    formData.append("id", value.id);
+    formData.append("name", value.name);
+    formData.append("price", value.price);
+    formData.append("description", value.description);
+
 
     try {
         const data = await axios.post(
             'http://localhost:8080/setNewProduct',
-            value
+            formData
         );
         // console.log('data', data);
         dispatch({

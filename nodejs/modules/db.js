@@ -12,6 +12,7 @@ const db = require('knex')({
     }
 });
 
+// customer
 const getCustomers = () => {
     return db('customerlist')
         .select('*')
@@ -46,18 +47,28 @@ const deleteCustomer = (customer_id) => {
         .returning('*')
 
 }
+// product
+
+const getProducts = () => {
+    return db('productlist')
+        .select('*')
+        .returning('*')
+
+}
 
 const setNewProduct = (data) => {
     return db('productlist')
         .insert(data)
         .returning('*')
-
 }
 
 module.exports = {
+    // customer
     getCustomers,
     setNewCustomer,
     getSpecificCustomer,
     deleteCustomer,
-    setNewProduct
+    // product
+    setNewProduct,
+    getProducts
 }

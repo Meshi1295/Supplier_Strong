@@ -76,11 +76,14 @@ app.delete('/deleteCustomer/:id', (req, res) => {
 
 // --------- product -----------
 
-app.post('/setNewProduct', (req, res) => {
-    try {
+app.post('/setNewProduct', upload.single('image'), (req, res) => {
+    console.log('upload.storage.filename', req.file.filename);
 
-        db.setNewProduct(req.body)
-            .then(customer => console.log("hi", customer))
+    try {
+        const value = { ...req.body, image: req.file.filename }
+
+        db.setNewProduct(value)
+            .then(customer => res.json(customer))
             .catch(err => {
                 console.log(err);
                 res.json({ mes: err })
@@ -90,6 +93,15 @@ app.post('/setNewProduct', (req, res) => {
         console.log(error);
         res.json({ mes: error })
     }
+})
+
+app.get('/allProducts', (req, res) => {
+    return db.getProducts()
+        .then(customer => {
+            // console.log(customer);
+            res.json(customer)
+        })
+        .catch(e => console.log(e))
 })
 
 
