@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DetailsCustomer from '../Details/DetailsCustomer';
 import InternalNav from '../InternalNav/InternalNav'
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
-import { delCustomer } from '../../redux/actions'
-
+import { delCustomer, setNavigateToCustomerComponent } from '../../redux/actions'
 
 const Customer = (props) => {
-    const { profileimg } = props
+
+    const [profileimg, setProfileimg] = useState('')
     const { id } = useParams()
 
     // show and hidden details
@@ -22,6 +22,36 @@ const Customer = (props) => {
         props.delCustomer(id);
         navigate('/myCustomer')
     }
+
+    useEffect(() => {
+        setNavigateToCustomerComponent(false)
+    }, [])
+
+    useEffect(() => {
+        const customer = props.customerList.find(item => {
+            return item.customer_id == id
+        })
+
+        if (customer) {
+            setProfileimg(customer.profileimg)
+        } else {
+            fetch('http://localhost:8080/allCustomer')
+                .then(res => res.json())
+                .then(data => {
+                    const imgs = data.find(item => {
+                        return item.customer_id == id
+                    })
+                    setProfileimg(imgs.profileimg)
+                })
+                .catch((e) => console.log(e))
+        }
+    }, [props.customerList])
+
+    useEffect(() => {
+        if (props.customer.data) {
+            setProfileimg(props.customer.data.profileimg)
+        }
+    }, [props.customer])
 
     return (
         <div>
@@ -44,7 +74,7 @@ const Customer = (props) => {
                 </ul>
             </header>
 
-            < InternalNav />
+            < InternalNav id={id} />
         </div>
     )
 }
@@ -52,14 +82,17 @@ const Customer = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        navigateToCustomerComponent: state.reducer_setCustomer.navigateToCustomerComponent
+        navigateToCustomerComponent: state.reducer_setCustomer.navigateToCustomerComponent,
+        customerList: state.reducer_customersList.customerList,
+        customer: state.reducer_setCustomer.customer
+
     }
 }
 
-
 const mapDispatchToProps = (dispatch) => {
     return {
-        delCustomer: (id) => dispatch(delCustomer(id))
+        delCustomer: (id) => dispatch(delCustomer(id)),
+        setNavigateToCustomerComponent: (value) => dispatch(setNavigateToCustomerComponent(value))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);

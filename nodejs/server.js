@@ -36,23 +36,20 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 // --------- customer -----------
 app.post('/setCustomer', upload.single('image'), (req, res) => {
-    console.log('upload.storage.filename', req.file.filename);
+    const fileName = req.file ? req.file.filename : null
     try {
-        const value = { ...req.body, filename: req.file.filename }
+        const value = { ...req.body, filename: fileName }
 
         db.setNewCustomer(value)
             .then(customer => res.json(customer))
             .catch(err => {
-                console.log(err);
                 res.json({ mes: err })
             })
 
     } catch (error) {
-        console.log(error);
         res.json({ mes: error })
     }
 })
-
 
 app.get('/allCustomer', (req, res) => {
     return db.getCustomers()
@@ -67,10 +64,29 @@ app.get('/specificCustomer/:id', (req, res) => {
         .catch(e => console.log(e))
 })
 
+app.post('/update_customer', upload.single('image'), (req, res) => {
+    const fileName = req.file ? req.file.filename : null
+    console.log('upload.storage.filename', fileName);
+    try {
+        const value = { ...req.body, image: fileName }
+
+        db.updateCustomer(value)
+            .then(customer => res.json(customer))
+            .catch(err => {
+                console.log(err);
+                res.json({ mes: err })
+            })
+
+    } catch (error) {
+        console.log(error);
+        res.json({ mes: error })
+    }
+})
+
 app.delete('/deleteCustomer/:id', (req, res) => {
     console.log(req.params.id);
     db.deleteCustomer(req.params.id)
-        .then(row => res.json(row))
+        .then(customer => res.json(customer))
         .catch(e => console.log(e))
 })
 
@@ -101,6 +117,13 @@ app.get('/allProducts', (req, res) => {
             // console.log(customer);
             res.json(customer)
         })
+        .catch(e => console.log(e))
+})
+
+app.delete('/deleteProduct/:id', (req, res) => {
+    console.log('req.params.id', req.params.id);
+    db.deleteProduct(req.params.id)
+        .then(product => res.json(product))
         .catch(e => console.log(e))
 })
 

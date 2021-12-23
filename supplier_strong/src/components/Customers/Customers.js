@@ -3,7 +3,7 @@ import '../../App.css'
 import { Link, useNavigate } from 'react-router-dom'
 import iconNewUser from '../../img/new.png'
 import { connect } from 'react-redux'
-import { setNavigateToCustomerComponent } from '../../redux/actions'
+import { setNavigateToCustomerComponent, customerList } from '../../redux/actions'
 
 const Customers = (props) => {
 
@@ -21,7 +21,11 @@ const Customers = (props) => {
     useEffect(() => {
         fetch('http://localhost:8080/allCustomer')
             .then(res => res.json())
-            .then(data => setCustomersIconList(data))
+            .then(data => {
+                setCustomersIconList(data)
+                props.customerList(data)
+            })
+            .catch((e) => console.log(e))
     }, [])
 
     return (
@@ -48,7 +52,8 @@ const Customers = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setNavigateToCustomerComponent: () => dispatch(setNavigateToCustomerComponent(false))
+        setNavigateToCustomerComponent: () => dispatch(setNavigateToCustomerComponent(false)),
+        customerList: (value) => dispatch(customerList(value))
     }
 }
 

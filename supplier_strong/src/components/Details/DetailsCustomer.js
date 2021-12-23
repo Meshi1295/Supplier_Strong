@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './DetailsCustomer.css'
+import { useNavigate } from "react-router-dom";
+import { setNavigateToCustomerComponent } from '../../redux/actions'
+import { connect } from 'react-redux'
+
 
 const DetailsCustomer = (props) => {
 
+    const history = useNavigate();
     const { id } = props
     const [oneCustomerData, setOneCustomerData] = useState('')
 
@@ -12,6 +17,11 @@ const DetailsCustomer = (props) => {
             .then(data => setOneCustomerData(data))
             .catch(e => console.log(e))
     }, [])
+
+    const updateCustomerId = () => {
+        props.setNavigateToCustomerComponent(false)
+        history(`/newCustomer/${id}`)
+    }
 
     return (
         <div>
@@ -25,7 +35,7 @@ const DetailsCustomer = (props) => {
                             <p>Phone: {item.customer_phone}</p>
                             <p>Address: {item.address}</p>
                             <p>Start work in: {item.start_work_date}</p>
-                            <button className="btn">Update</button>
+                            <button onClick={updateCustomerId} className="btn">Update</button>
                         </div>
                     })
                 ) : null
@@ -33,4 +43,10 @@ const DetailsCustomer = (props) => {
         </div>
     )
 }
-export default DetailsCustomer;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setNavigateToCustomerComponent: (value) => dispatch(setNavigateToCustomerComponent(value))
+    }
+}
+export default connect(null, mapDispatchToProps)(DetailsCustomer);

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './TableAdd.css'
 import { connect } from 'react-redux'
-import { setNewProduct } from '../../redux/actions'
+import { setNewProduct, delProduct } from '../../redux/actions'
 
 const TableAdd = (props) => {
+
     const [products, setProducts] = useState([])
     const [addFormData, setAddFormData] = useState({
         id: '',
@@ -19,9 +20,25 @@ const TableAdd = (props) => {
         fetch('http://localhost:8080/allProducts')
             .then(res => res.json())
             .then(data => setProducts(data))
-            .catch((e) => console.log("e", e))
+            .catch((e) => console.log(e))
 
     }, [])
+
+    useEffect(() => {
+        const findProduct = products.findIndex(item => {
+            return item.id == props.product.id
+        })
+        if (findProduct !== -1) {
+            products.splice(findProduct, 1)
+            setProducts([...products])
+        }
+
+        fetch('http://localhost:8080/allProducts')
+            .then(res => res.json())
+            .then(data => setProducts(data))
+            .catch((e) => console.log(e))
+
+    }, [props.product])
 
     const addFormChange = (e) => {
         e.preventDefault()
@@ -31,7 +48,6 @@ const TableAdd = (props) => {
 
         addFormData[fieldName] = fieldValue
         const newFormData = { ...addFormData }
-
         setAddFormData(newFormData);
     }
 
@@ -44,13 +60,19 @@ const TableAdd = (props) => {
             profileImg: profileImg,
             description: addFormData.description
         }
+        const newProduct2 = { ...newProduct, profileImg: profileImg.name }
+        console.log('newProduct2', newProduct2);
+        const newProducts2 = [...products]
+        newProducts2.push(newProduct2)
+        // products.push(newProduct)
+        // const newProducts = [...products]
 
-        products.push(newProduct)
-        const newProducts = [...products]
-        setProducts(newProducts)
-
+        // console.log('profileImg', profileImg.name);
+        setProducts([...newProducts2])
         props.setNewProduct(newProduct)
     }
+
+
 
     return (
         <div >
@@ -71,11 +93,18 @@ const TableAdd = (props) => {
                             <td>{product.name}</td>
                             <td>{product.price}</td>
                             <td>
-                                <img style={{ width: '50px', height: '50px' }} src={`http://localhost:8080/uploads/${product.image}`} alt="product" /></td>
+                                <img
+                                    style={{ width: '50px', height: '50px' }}
+                                    src={`http://localhost:8080/uploads/${product.image}`} alt="product" />
+                            </td>
                             <td>{product.description}</td>
                             <td>
                                 <button className="btn edit">Edit</button>
-                                <button className="btn delete" >Delete</button>
+                                <button
+                                    onClick={() => props.delProduct(product.id)}
+                                    className="btn delete" >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     })}
@@ -102,10 +131,17 @@ const TableAdd = (props) => {
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
     return {
-        setNewProduct: (value) => dispatch(setNewProduct(value))
+        product: state.reducer_setProduct.product
     }
 }
 
-export default connect(null, mapDispatchToProps)(TableAdd)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setNewProduct: (value) => dispatch(setNewProduct(value)),
+        delProduct: (id) => dispatch(delProduct(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableAdd)

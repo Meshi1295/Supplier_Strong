@@ -16,6 +16,8 @@ function App() {
         <Route path="/myCustomer" element={<Customers />} />
         <Route path="/customer/:id" element={<Customer />} />
         <Route path="/newCustomer" element={<AddCustomer />} />
+        <Route path="/newCustomer/:id" element={<AddCustomer />} />
+
       </Routes>
       < Footer />
     </div>

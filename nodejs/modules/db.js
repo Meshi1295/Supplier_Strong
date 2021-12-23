@@ -42,13 +42,43 @@ const setNewCustomer = (
 
 const deleteCustomer = (customer_id) => {
     return db('customerlist')
-        .where({ customer_id: customer_id })
+        .where({ customer_id })
         .del()
         .returning('*')
 
 }
-// product
 
+const updateCustomer = (data) => {
+    console.log('dbbbbbbb', data);
+    if (data.image) {
+        return db('customerlist')
+            .update({
+                customer_name: data.fullName,
+                store_name: data.nameStore,
+                customer_phone: data.phoneNumber,
+                start_work_date: data.startDate,
+                address: data.address,
+                profileimg: data.image
+            })
+            .where({ customer_id: data.id })
+            .returning('*')
+    } else {
+        return db('customerlist')
+            .update({
+                customer_name: data.fullName,
+                store_name: data.nameStore,
+                customer_phone: data.phoneNumber,
+                start_work_date: data.startDate,
+                address: data.address
+            })
+            .where({ customer_id: data.id })
+            .returning('*')
+    }
+
+
+}
+
+// product
 const getProducts = () => {
     return db('productlist')
         .select('*')
@@ -62,13 +92,22 @@ const setNewProduct = (data) => {
         .returning('*')
 }
 
+const deleteProduct = (id) => {
+    return db('productlist')
+        .where({ id })
+        .del()
+        .returning('*')
+}
+
 module.exports = {
     // customer
     getCustomers,
     setNewCustomer,
     getSpecificCustomer,
     deleteCustomer,
+    updateCustomer,
     // product
     setNewProduct,
-    getProducts
+    getProducts,
+    deleteProduct
 }
